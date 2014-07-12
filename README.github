@@ -3,7 +3,7 @@
 -----------------------------------------------------------------------
 1.goto os sources:
 
-$ repo init -u https://github.com/gotoos/manifest.git -b master
+$ repo init -u https://github.com/yudatun/manifest.git -b master
 
 -----------------------------------------------------------------------
 2.goto bootloader sources:

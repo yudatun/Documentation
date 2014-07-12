@@ -4,13 +4,13 @@
 其最终的目的是开发一套移植简单，开发方便，运行稳定基于
 linux内核的操作系统，使用它可以更快捷的定制出自己的智能硬件，其由以下三个模块组成：
 
-1. gotoos - https://github.com/gotoos, 这是gotoos的核心，其相当于是基于linux内核之上的一个中间层，
+1. yudatun - https://github.com/yudatun, 这是yudatun的核心，其相当于是基于linux内核之上的一个中间层，
 在这里的code不与任何硬件相关，主要就是要隐藏各种复杂的硬件操作，最终形成一套稳定的控制硬件设备的API接口，
 最终可以剥离出一套sdk用于各种智能硬件设备厂商定制控制自己的硬件。使控制硬件就像编写一个APP一样的简单。
-通过repo init -u https://github.com/gotoos/manifest.git -b master && repo sync
-从github上将gotoos同步下来之后我们可以看到gotoos包含以下目录：
+通过repo init -u https://github.com/yudatun/manifest.git -b master && repo sync
+从github上将yudatun同步下来之后我们可以看到yudatun包含以下目录：
 
-(1). build - 这个工程是gotoos的构建系统类似于Android的构建系统，使用bash shell和GNU Makefile脚本语言开发，
+(1). build - 这个工程是yudatun的构建系统类似于Android的构建系统，使用bash shell和GNU Makefile脚本语言开发，
 目的是使系统移植简单，统一管理整个系统，系统的每一个模块都统一由一个Yudatun.mk的Makefile文件控制编译，
 使得每次只需要定义很简单的几个变量就能将模块编译到系统中，例如，init模块的Yudatun.mk编写如下：
 LOCAL_PATH := $(call my-dir)   # 获取当前模块所在的路径
@@ -33,32 +33,32 @@ LOCAL_STATIC_LIBRARIES := \
 
 # 定义最终是要生成可执行文件还是库文件
 include $(BUILD_EXECUTABLE)
-而且在将gotoos移植到一个全新的硬件上也变得非常简单，你可以这样做就能将其移植支持另外一种全新的硬件设备，比如设备名称叫做qt210：
+而且在将yudatun移植到一个全新的硬件上也变得非常简单，你可以这样做就能将其移植支持另外一种全新的硬件设备，比如设备名称叫做qt210：
 A. 在build/envsetup.sh 中添加：
-add_lunch_combo gotoos_qt210-eng
-add_lunch_combo gotoos_qt210-userdebug
+add_lunch_combo yudatun_qt210-eng
+add_lunch_combo yudatun_qt210-userdebug
 这样就能够在launch的时候选择编译运行在对应硬件的系统
-B. 在build/target/product中添加一个名为gotoos_qt210.mk的文件，主要用于与软件相关的移植，编辑内容如下：
+B. 在build/target/product中添加一个名为yudatun_qt210.mk的文件，主要用于与软件相关的移植，编辑内容如下：
 # inherit-product函数的作用就是继承指定名称的makefile的所定义的功能和系统模块，
-# 其中一个很重要的变量就是PRODUCT_PACKAGES,这个变量包含了对应设备所需要的gotoos那些模块的功能，
-# 这样就很容易对gotoos进行裁剪和增加功能.
-$(call inherit-product,$(SRC_TARGET_DIR)/product/gotoos.mk)
-$(call inherit-product,$(SRC_TARGET_DIR)/product/gotoos_base.mk)
+# 其中一个很重要的变量就是PRODUCT_PACKAGES,这个变量包含了对应设备所需要的yudatun那些模块的功能，
+# 这样就很容易对yudatun进行裁剪和增加功能.
+$(call inherit-product,$(SRC_TARGET_DIR)/product/yudatun.mk)
+$(call inherit-product,$(SRC_TARGET_DIR)/product/yudatun_base.mk)
 
-PRODUCT_NAME := gotoos_qt210
+PRODUCT_NAME := yudatun_qt210
 PRODUCT_DEVICE := qt210
-在YudatunProducts.mk中的变量PRODUCT_MAKEFILES添加上gotoos_qt210.mk文件：
+在YudatunProducts.mk中的变量PRODUCT_MAKEFILES添加上yudatun_qt210.mk文件：
 C.在build/target/board目录下创建一个名成为qt210的目录，在qt210目录下添加一个BoardConfig.mk文件主要用于定义
 与硬件相关的配置.
 目前只需要添加：
 TARGET_ARCH := arm #告诉程序运行的平台是arm平台就可以了
 D. 在firmware文件中添加已经经过移植并且编译好的bootloader和kernel文件.
-仅仅只需要很简单的4步走就能将gotoos移植裁剪到指定的硬件设备上，这就体现了gotoos的核心思想就是简单，简单才能使得程序更加的稳定，才能提高开发的效率。
+仅仅只需要很简单的4步走就能将yudatun移植裁剪到指定的硬件设备上，这就体现了yudatun的核心思想就是简单，简单才能使得程序更加的稳定，才能提高开发的效率。
 
 (2). compiler - 这个文件夹主要保存交叉编译器和用来寻找对应target设备所对应的交叉编译器的脚本.
-(3). document - 这个文件夹主要用来保存gotoos的开发文档和一些开发工具的配置文件。
+(3). document - 这个文件夹主要用来保存yudatun的开发文档和一些开发工具的配置文件。
 (4). firmware - 这个文件夹主要用来保存已经移植好了的bootloader和kernel 二进制文件.
-(5). system/core - 这就是gotoos所要开发的核心服务，这是gotoos的一次疯狂的尝试，引入了lua这种高效的语言，
+(5). system/core - 这就是yudatun所要开发的核心服务，这是yudatun的一次疯狂的尝试，引入了lua这种高效的语言，
 用以弥补c/c++的不足，当前还处于开发初级阶段很多疯狂的idea还没有实现，目的就是在这个目录下实现各种控制硬件的服务，
 比如蓝牙，wifi，audio等等的用于管理硬件的服务程序，将这些服务通过很简单的方式就添加到系统中，而这些特殊的服务就是需要我们实现控制硬件设备的的接口，
 最终用户端通过一种非常高效的IPC机制就能访问到这些服务的接口，从而实现控制硬件设备的效果. 例如：

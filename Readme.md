@@ -4,8 +4,8 @@ The Yudatun Open Source Project
 Main Page:
 --------------------------------------------------------------------------------
 
-[![image]](http://gotoos.strikingly.com)
-[image]: https://avatars3.githubusercontent.com/u/5319183?s=400 "gotoos"
+[![image]](http://yudatun.strikingly.com)
+[image]: https://avatars3.githubusercontent.com/u/5319183?s=400 "yudatun"
 
 Preparation:
 --------------------------------------------------------------------------------
@@ -39,8 +39,8 @@ $ chmod a+x ~/bin/repo
 ### Sync Sources:
 
 ```
-$ mkdir ~/gotoos
-$ repo init -u https://github.com/gotoos/manifest.git -b master
+$ mkdir ~/yudatun
+$ repo init -u https://github.com/yudatun/manifest.git -b master
 $ repo sync -j4
 ```
 
@@ -68,7 +68,7 @@ $ sudo make install
 ### Running:
 
 ```
-$ cd gotoos/out/target/product/qemu/
+$ cd yudatun/out/target/product/qemu/
 $ emulator kernel initramfs.img
 ```
 
@@ -86,16 +86,16 @@ Input some message as following:
 > Line 2：
 > Line 3：N/A(or bugid#id)
 > Line 4：
-> Line 5：This is a sample of gotoos commit message. Please follow this.
-> Line 6：Signed-off-by: liminghao <vgotoos@gmail.com>
-$ git format-patch gotoos/master -o out_patch/
+> Line 5：This is a sample of yudatun commit message. Please follow this.
+> Line 6：Signed-off-by: liminghao <vyudatun@gmail.com>
+$ git format-patch yudatun/master -o out_patch/
 Use a email-box by yourself and attach the patch and send to us:
 ```
 
 ### push to gerrithub for review
 
 ```
-$ git push ssh://gotoos@review.gerrithub.io:29418/gotoos/projectname HEAD:refs/for/branch
+$ git push ssh://yudatun@review.gerrithub.io:29418/yudatun/projectname HEAD:refs/for/branch
 ```
 
 or
@@ -106,7 +106,7 @@ $ repo upload .
 
 Mail Lists:
 --------------------------------------------------------------------------------
-* <vgotoos@gmail.com>
+* <vyudatun@gmail.com>
 * <shuntongzhang@gmail.com>
 * <liminghao@xiaomi.com>
 
