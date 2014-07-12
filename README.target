@@ -1,0 +1,99 @@
+            The Gotoos Open Source Project
+
+   Gotoos 是依托在github上遵行GNU License V2的开源系统，
+其最终的目的是开发一套移植简单，开发方便，运行稳定基于
+linux内核的操作系统，使用它可以更快捷的定制出自己的智能硬件，其由以下三个模块组成：
+
+1. gotoos - https://github.com/gotoos, 这是gotoos的核心，其相当于是基于linux内核之上的一个中间层，
+在这里的code不与任何硬件相关，主要就是要隐藏各种复杂的硬件操作，最终形成一套稳定的控制硬件设备的API接口，
+最终可以剥离出一套sdk用于各种智能硬件设备厂商定制控制自己的硬件。使控制硬件就像编写一个APP一样的简单。
+通过repo init -u https://github.com/gotoos/manifest.git -b master && repo sync
+从github上将gotoos同步下来之后我们可以看到gotoos包含以下目录：
+
+(1). build - 这个工程是gotoos的构建系统类似于Android的构建系统，使用bash shell和GNU Makefile脚本语言开发，
+目的是使系统移植简单，统一管理整个系统，系统的每一个模块都统一由一个Gotoos.mk的Makefile文件控制编译，
+使得每次只需要定义很简单的几个变量就能将模块编译到系统中，例如，init模块的Gotoos.mk编写如下：
+LOCAL_PATH := $(call my-dir)   # 获取当前模块所在的路径
+include $(CLEAR_VARS)   # 清空变量
+
+LOCAL_SRC_FILES := \  # 添加当前模块所依赖的源文件
+    util.c \
+    init.c
+
+LOCAL_MODULE := init # 定义编译最终生成的二进制文件名称
+
+LOCAL_FORCE_STATIC_EXECUTABLE := true # 为true代表静态编译，没有的话就为动态编译
+LOCAL_MODULE_PATH := $(TARGET_ROOT_OUT) # 定义最终需要保存到的路径
+# 定义尚未被strip的二进制文件的生成路径
+LOCAL_UNSTRIPPED_PATH := $(TARGET_ROOT_OUT_UNSTRIPPED)
+
+# 定义所依赖的库
+LOCAL_STATIC_LIBRARIES := \
+    libcutils liblua
+
+# 定义最终是要生成可执行文件还是库文件
+include $(BUILD_EXECUTABLE)
+而且在将gotoos移植到一个全新的硬件上也变得非常简单，你可以这样做就能将其移植支持另外一种全新的硬件设备，比如设备名称叫做qt210：
+A. 在build/envsetup.sh 中添加：
+add_lunch_combo gotoos_qt210-eng
+add_lunch_combo gotoos_qt210-userdebug
+这样就能够在launch的时候选择编译运行在对应硬件的系统
+B. 在build/target/product中添加一个名为gotoos_qt210.mk的文件，主要用于与软件相关的移植，编辑内容如下：
+# inherit-product函数的作用就是继承指定名称的makefile的所定义的功能和系统模块，
+# 其中一个很重要的变量就是PRODUCT_PACKAGES,这个变量包含了对应设备所需要的gotoos那些模块的功能，
+# 这样就很容易对gotoos进行裁剪和增加功能.
+$(call inherit-product,$(SRC_TARGET_DIR)/product/gotoos.mk)
+$(call inherit-product,$(SRC_TARGET_DIR)/product/gotoos_base.mk)
+
+PRODUCT_NAME := gotoos_qt210
+PRODUCT_DEVICE := qt210
+在GotoosProducts.mk中的变量PRODUCT_MAKEFILES添加上gotoos_qt210.mk文件：
+C.在build/target/board目录下创建一个名成为qt210的目录，在qt210目录下添加一个BoardConfig.mk文件主要用于定义
+与硬件相关的配置.
+目前只需要添加：
+TARGET_ARCH := arm #告诉程序运行的平台是arm平台就可以了
+D. 在firmware文件中添加已经经过移植并且编译好的bootloader和kernel文件.
+仅仅只需要很简单的4步走就能将gotoos移植裁剪到指定的硬件设备上，这就体现了gotoos的核心思想就是简单，简单才能使得程序更加的稳定，才能提高开发的效率。
+
+(2). compiler - 这个文件夹主要保存交叉编译器和用来寻找对应target设备所对应的交叉编译器的脚本.
+(3). document - 这个文件夹主要用来保存gotoos的开发文档和一些开发工具的配置文件。
+(4). firmware - 这个文件夹主要用来保存已经移植好了的bootloader和kernel 二进制文件.
+(5). system/core - 这就是gotoos所要开发的核心服务，这是gotoos的一次疯狂的尝试，引入了lua这种高效的语言，
+用以弥补c/c++的不足，当前还处于开发初级阶段很多疯狂的idea还没有实现，目的就是在这个目录下实现各种控制硬件的服务，
+比如蓝牙，wifi，audio等等的用于管理硬件的服务程序，将这些服务通过很简单的方式就添加到系统中，而这些特殊的服务就是需要我们实现控制硬件设备的的接口，
+最终用户端通过一种非常高效的IPC机制就能访问到这些服务的接口，从而实现控制硬件设备的效果. 例如：
+我们首先需要在init进程中将这些核心服务启动起来，启动服务非常简单，只需要在system/core/rootdir/Init.lua如下添加代码就能在init
+进程中将一个服务启动起来
+ShellService = Service:new()
+sh = ShellService:new{
+   "sh",
+   "/bin/sh",
+   "core",
+   0,
+   0,
+   0, -- time of last start
+   4, -- first crash within inspection window
+   5, -- number of times crashed with window
+   6,
+   7
+}
+s:start()
+当然这个功能还没有完全的完成，这里只是举个简单的例子。
+之后我们又会编写Client端的接口，Service与Client的接口几乎是一对一的模式，拿蓝牙来举个例子：
+现在有用户要开发打开蓝牙的程序，而我们几乎提供了控制蓝牙设备的所有接口.
+Server  <----BINDER IPC----- API <---------用户
+openBluetooth()               openBluetooth()
+
+综上可以看出用户只需要简单调用打开蓝牙的的接口函数openBluetooth, 而最终这个API接口通过BINDER通信
+就能够调用到Server端的openBluetooth函数实现打开蓝牙的这个功能，而不需要开发者过多的关心是怎么打开的，
+而在Server端我们也不会直接就去访问硬件，在Server端我们会增加一层访问硬件设备的中间层，最终这个中间层其实
+就是打开一个已经封装好了的lib, 这个lib包含了所有对应蓝牙设备所能支持的功能，使用哪家的蓝牙硬件一般就由指定的
+厂商提供所有的这些功能，因为几乎所有的硬件设备都有一个标准，我们按照这个标准实现出这些接口就可以了。
+而我们自己的工作量主要集中在如何实现Client 和 Server端通信的一套开发框架和一些常用的服务上。最终我们定义的API就可以打包成一套sdk.
+
+2. gotokernel - https://github.com/gotokernel - 把kernel从我们的开发主线上剥离出来，就是我不想过多的掺杂上
+与硬件相关的东西，这样会导致整个工程过于庞大，而这个kernel就交由那些vendor厂商和第三方去做，最终只需要将移植好的
+kernel二进制文件加入到我们的firmware文件夹下最终就能够将kernel随着系统一起打包进去.
+
+3. gotobootloader - https://github.com/gotobootloader - 同样把bootloader从开发主线上分离出和
+kernel有类似的原因，其最终也是要加入到firmware中随着系统一起打包.
