@@ -1,6 +1,6 @@
-            The Gotoos Open Source Project
+            The Yudatun Open Source Project
 
-   Gotoos 是依托在github上遵行GNU License V2的开源系统，
+   Yudatun 是依托在github上遵行GNU License V2的开源系统，
 其最终的目的是开发一套移植简单，开发方便，运行稳定基于
 linux内核的操作系统，使用它可以更快捷的定制出自己的智能硬件，其由以下三个模块组成：
 
@@ -11,8 +11,8 @@ linux内核的操作系统，使用它可以更快捷的定制出自己的智能
 从github上将gotoos同步下来之后我们可以看到gotoos包含以下目录：
 
 (1). build - 这个工程是gotoos的构建系统类似于Android的构建系统，使用bash shell和GNU Makefile脚本语言开发，
-目的是使系统移植简单，统一管理整个系统，系统的每一个模块都统一由一个Gotoos.mk的Makefile文件控制编译，
-使得每次只需要定义很简单的几个变量就能将模块编译到系统中，例如，init模块的Gotoos.mk编写如下：
+目的是使系统移植简单，统一管理整个系统，系统的每一个模块都统一由一个Yudatun.mk的Makefile文件控制编译，
+使得每次只需要定义很简单的几个变量就能将模块编译到系统中，例如，init模块的Yudatun.mk编写如下：
 LOCAL_PATH := $(call my-dir)   # 获取当前模块所在的路径
 include $(CLEAR_VARS)   # 清空变量
 
@@ -47,7 +47,7 @@ $(call inherit-product,$(SRC_TARGET_DIR)/product/gotoos_base.mk)
 
 PRODUCT_NAME := gotoos_qt210
 PRODUCT_DEVICE := qt210
-在GotoosProducts.mk中的变量PRODUCT_MAKEFILES添加上gotoos_qt210.mk文件：
+在YudatunProducts.mk中的变量PRODUCT_MAKEFILES添加上gotoos_qt210.mk文件：
 C.在build/target/board目录下创建一个名成为qt210的目录，在qt210目录下添加一个BoardConfig.mk文件主要用于定义
 与硬件相关的配置.
 目前只需要添加：

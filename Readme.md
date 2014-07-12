@@ -1,4 +1,4 @@
-The Gotoos Open Source Project
+The Yudatun Open Source Project
 ================================================================================
 
 Main Page:
