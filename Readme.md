@@ -100,7 +100,7 @@ $ git push ssh://yudatun@review.gerrithub.io:29418/yudatun/projectname HEAD:refs
 or
 
 ```
-$ repo upload .
+$ yudatun_upload projectname branch
 ```
 
 Mail Lists:
