@@ -58,9 +58,8 @@ Config Environment:
 ### Install QEMU:
 
 ```
-$ git clone https://github.com/qemu/qemu.git
-$ cd qemu
-$ ./configure --target-list=arm-softmmu
+$ cd thirdparty/qemu
+$ ./configure --enable-sdl --audio-drv-list=alsa --target-list=arm-softmmu
 $ make
 $ sudo make install
 ```
@@ -106,7 +105,7 @@ $ repo upload .
 
 Mail Lists:
 --------------------------------------------------------------------------------
-* <vyudatun@gmail.com>
+* <yudatun@gmail.com>
 * <shuntongzhang@gmail.com>
 * <liminghao@xiaomi.com>
 
