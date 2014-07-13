@@ -5,7 +5,7 @@ Main Page:
 --------------------------------------------------------------------------------
 
 [![image]](http://yudatun.strikingly.com)
-[image]: https://avatars3.githubusercontent.com/u/5319183?s=400 "yudatun"
+[image]: https://avatars3.githubusercontent.com/u/5319183?s=400 "Yudatun"
 
 Preparation:
 --------------------------------------------------------------------------------
@@ -47,7 +47,7 @@ $ repo sync -j4
 ### Make Image:
 
 ```
-$ . make/envsetup.sh
+$ . build/envsetup.sh
 $ lunch        # choose target device(default is qemu)
 $ make
 ```
