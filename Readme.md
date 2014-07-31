@@ -64,11 +64,13 @@ $ make
 $ sudo make install
 ```
 
-### Running:
+### Starting:
 
 ```
 $ cd yudatun/out/target/product/qemu/
-$ emulator kernel initramfs.img
+$ start kernel initramfs.img
+or
+$ start-nographic kernel initramfs.img
 ```
 
 Contribution:
