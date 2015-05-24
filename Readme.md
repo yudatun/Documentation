@@ -39,9 +39,23 @@ $ chmod a+x ~/bin/repo
 
 ### Sync Sources:
 
+##### qemu
+
 ```
-$ mkdir ~/yudatun
-$ repo init -u https://github.com/yudatun/manifest.git -b master
+$ mkdir ~/yudatun_qemu
+$ repo init -u https://github.com/yudatun/manifest.git -m yudatun_qemu.xml
+```
+
+##### raspberry-pi
+
+```
+$ mkdir ~/yudatun_rpi
+$ repo init -u https://github.com/yudatun/manifest.git -m yudatun_raspberry-pi.xml
+```
+
+**Sync**:
+
+```
 $ repo sync -j4
 ```
 
@@ -49,7 +63,7 @@ $ repo sync -j4
 
 ```
 $ . build/envsetup.sh
-$ lunch        # choose target device(default is qemu)
+$ lunch
 $ make
 ```
 
