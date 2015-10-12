@@ -43,14 +43,14 @@ $ chmod a+x ~/bin/repo
 
 ```
 $ mkdir ~/yudatun_qemu
-$ repo init -u https://github.com/yudatun/manifest.git -m yudatun_qemu.xml
+$ repo init -u ssh://git@github.com/yudatun/manifest.git -m yudatun_qemu.xml
 ```
 
 ##### raspberry-pi
 
 ```
 $ mkdir ~/yudatun_rpi
-$ repo init -u https://github.com/yudatun/manifest.git -m yudatun_raspberry-pi.xml
+$ repo init -u ssh://git@github.com/yudatun/manifest.git -m yudatun_raspberry-pi.xml
 ```
 
 **Sync**:
