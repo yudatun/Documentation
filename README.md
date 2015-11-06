@@ -1,14 +1,14 @@
 The Yudatun Open Source Project
-================================================================================
+========================================
 
 Main Page:
---------------------------------------------------------------------------------
+----------------------------------------
 
 [![image]](http://yudatun.strikingly.com)
 [image]: https://avatars3.githubusercontent.com/u/5319183?s=400 "Yudatun"
 
 Preparation:
---------------------------------------------------------------------------------
+----------------------------------------
 
 ```
 $ sudo apt-get install git-core gnupg flex bison gperf build-essential zip curl
@@ -24,8 +24,8 @@ $ sudo apt-get update
 $ sudo apt-get install unetbootin
 ```
 
-How To Get Sources?
---------------------------------------------------------------------------------
+Get Sources:
+----------------------------------------
 
 ### Config Repo:
 
@@ -39,36 +39,33 @@ $ chmod a+x ~/bin/repo
 
 ### Sync Sources:
 
-##### qemu
+#### qemu
 
 ```
 $ mkdir ~/yudatun_qemu
 $ repo init -u ssh://git@github.com/yudatun/manifest.git -m yudatun_qemu.xml
+$ repo sync -j[num]
 ```
 
-##### raspberry-pi
+#### raspberry-pi
 
 ```
 $ mkdir ~/yudatun_rpi
 $ repo init -u ssh://git@github.com/yudatun/manifest.git -m yudatun_raspberry-pi.xml
-```
-
-**Sync**:
-
-```
-$ repo sync -j4
+$ repo sync -j[num]
 ```
 
 ### Make Image:
 
 ```
 $ . build/envsetup.sh
-$ lunch
-$ make
+$ lunch 4
+$ make install-kernel-headers -j[num]
+$ make -j[num]
 ```
 
 Config Environment:
---------------------------------------------------------------------------------
+----------------------------------------
 
 ### Install QEMU:
 
@@ -89,7 +86,7 @@ $ start-nographic kernel initramfs.img
 ```
 
 Contribution:
---------------------------------------------------------------------------------
+----------------------------------------
 
 ### make patch
 
@@ -121,22 +118,8 @@ $ yudatun_upload projectname branch
 ```
 
 Mail Lists:
---------------------------------------------------------------------------------
+----------------------------------------
+
 * <yudatun@gmail.com>
 * <shuntongzhang@gmail.com>
 * <liminghao@xiaomi.com>
-
-Bootloader Url:
---------------------------------------------------------------------------------
-gotobootloader(https://github.com/gotobootloader)
-
-Kernel Url:
---------------------------------------------------------------------------------
-gotokernel(https://github.com/gotokernel)
-
-Blog
---------------------------------------------------------------------------------
-* http://bliterness.blogspot.com/
-* http://blog.csdn.net/zeroboundary/article/details/12657215
-* http://www.opensourceforu.com/2011/06/qemu-for-embedded-systems-development-part-1/
-* http://blog.csdn.net/leisure512/article/details/6761073
