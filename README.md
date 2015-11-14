@@ -84,6 +84,14 @@ or
 $ start-nographic kernel initramfs.img
 ```
 
+### Running on raspberrypi
+
+```
+$ flash ptable out/target/product/MBR.bin -H /dev/mmcblk0
+$ flash boot out/target/product/boot.img -H /dev/mmcblk0p1
+$ flash system out/target/product/system.img -H /dev/mmcblk0p2
+```
+
 Contribution:
 ----------------------------------------
 
