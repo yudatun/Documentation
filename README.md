@@ -60,7 +60,6 @@ $ repo sync -j[num]
 ```
 $ . build/envsetup.sh
 $ lunch 4
-$ make install-kernel-headers -j[num]
 $ make -j[num]
 ```
 
