@@ -10,6 +10,8 @@ Main Page:
 Preparation:
 ----------------------------------------
 
+### Dependencies
+
 ```
 $ sudo apt-get install git-core gnupg flex bison gperf build-essential zip curl
 $ sudo apt-get install git-cola
@@ -24,10 +26,7 @@ $ sudo apt-get update
 $ sudo apt-get install unetbootin
 ```
 
-Get Sources:
-----------------------------------------
-
-### Config Repo:
+### Repo
 
 ```
 $ mkdir ~/bin
@@ -37,60 +36,16 @@ $ curl http://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
 $ chmod a+x ~/bin/repo
 ```
 
-### Sync Sources:
-
-#### qemu
-
-```
-$ mkdir ~/yudatun_qemu
-$ repo init -u ssh://git@github.com/yudatun/manifest.git -m yudatun_qemu.xml
-$ repo sync -j[num]
-```
-
-#### raspberry-pi
-
-```
-$ mkdir ~/yudatun_rpi
-$ repo init -u ssh://git@github.com/yudatun/manifest.git -m yudatun_raspberry-pi.xml
-$ repo sync -j[num]
-```
-
-### Make Image:
-
-```
-$ . build/envsetup.sh
-$ lunch 4
-$ make -j[num]
-```
-
-Config Environment:
+Platforms:
 ----------------------------------------
 
-### Install QEMU:
+### qemu
 
-```
-$ cd thirdparty/qemu
-$ ./configure --enable-sdl --audio-drv-list=alsa --target-list=arm-softmmu
-$ make
-$ sudo make install
-```
+https://github.com/yudatun/Documentation/tree/master/arch/qemu/README.md
 
-### Starting:
+### raspberry-pi
 
-```
-$ cd yudatun/out/target/product/qemu/
-$ start kernel initramfs.img
-or
-$ start-nographic kernel initramfs.img
-```
-
-### Running on raspberrypi
-
-```
-$ flash ptable out/target/product/MBR.bin -H /dev/mmcblk0
-$ flash boot out/target/product/boot.img -H /dev/mmcblk0p1
-$ flash system out/target/product/system.img -H /dev/mmcblk0p2
-```
+https://github.com/yudatun/Documentation/tree/master/arch/arm/raspberry_pi/README.md
 
 Contribution:
 ----------------------------------------
