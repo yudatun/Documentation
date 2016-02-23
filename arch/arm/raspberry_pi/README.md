@@ -10,7 +10,7 @@ $ repo init -u ssh://git@github.com/yudatun/manifest.git -m yudatun_raspberry-pi
 $ repo sync -j[num]
 ```
 
-Make images:
+Build images:
 ----------------------------------------
 
 ```
@@ -36,3 +36,5 @@ sudo ssh pi@ip
 ```
 
 ### scan ip in local network
+
+https://github.com/yudatun/Documentation/tree/master/arch/arm/raspberry_pi/nmap.md
