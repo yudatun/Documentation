@@ -1,6 +1,8 @@
 The Yudatun Open Source Project
 ========================================
 
+Yudatun redefining Brillo.
+
 Main Page:
 ----------------------------------------
 

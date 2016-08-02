@@ -5,8 +5,8 @@ Get sources:
 ----------------------------------------
 
 ```
-$ mkdir ~/yudatun_rpi
-$ repo init -u ssh://git@github.com/yudatun/manifest.git -m yudatun_raspberry-pi.xml
+$ mkdir ~/Yudatun
+$ repo init -u ssh://git@github.com/yudatun/manifest.git -m yudatun-v1-rpi-dev.xml
 $ repo sync -j[num]
 ```
 
@@ -15,7 +15,7 @@ Build images:
 
 ```
 $ . build/envsetup.sh
-$ lunch 4
+$ lunch
 $ make -j[num]
 ```
 
@@ -23,9 +23,9 @@ Flash images:
 ----------------------------------------
 
 ```
-$ flash ptable out/target/product/MBR.bin -H /dev/mmcblk0
-$ flash boot out/target/product/boot.img -H /dev/mmcblk0p1
-$ flash system out/target/product/system.img -H /dev/mmcblk0p2
+$ flash ptable out/target/product/raspberrypi/MBR.bin -H /dev/mmcblk0
+$ flash boot out/target/product/raspberrypi/boot.img -H /dev/mmcblk0p1
+$ flash system out/target/product/raspberrypi/system.img -H /dev/mmcblk0p2
 ```
 
 SSH login:
