@@ -6,7 +6,7 @@ Get sources:
 
 ```
 $ mkdir ~/Yudatun
-$ repo init -u ssh://git@github.com/yudatun/manifest.git -m yudatun-v1-rpi-dev.xml
+$ repo init -u ssh://git@github.com/yudatun/brillo_manifest.git -m yudatun-v1-rpi-dev.xml
 $ repo sync -j[num]
 ```
 
@@ -34,7 +34,3 @@ SSH login:
 ```
 sudo ssh pi@ip
 ```
-
-### scan ip in local network
-
-https://github.com/yudatun/Documentation/tree/master/arch/arm/raspberry_pi/nmap.md
