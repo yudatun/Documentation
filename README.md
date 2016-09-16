@@ -47,7 +47,7 @@ https://github.com/yudatun/Documentation/tree/master/arch/qemu/README.md
 
 ### raspberry-pi
 
-https://github.com/yudatun/Documentation/tree/master/arch/arm/raspberry_pi/README.md
+https://github.com/yudatun/Documentation/tree/master/arch/arm/raspberrypi/README.md
 
 Contribution:
 ----------------------------------------
@@ -64,26 +64,13 @@ Input some message as following:
 > Line 3：N/A(or bugid#id)
 > Line 4：
 > Line 5：This is a sample of yudatun commit message. Please follow this.
-> Line 6：Signed-off-by: liminghao <vyudatun@gmail.com>
+> Line 6：Signed-off-by: liminghao <yudatun@gmail.com>
 $ git format-patch yudatun/master -o out_patch/
 Use a email-box by yourself and attach the patch and send to us:
-```
-
-### push to gerrithub for review
-
-```
-$ git push ssh://yudatun@review.gerrithub.io:29418/yudatun/projectname HEAD:refs/for/branch
-```
-
-or
-
-```
-$ yudatun_upload projectname branch
 ```
 
 Mail Lists:
 ----------------------------------------
 
 * <yudatun@gmail.com>
-* <shuntongzhang@gmail.com>
 * <liminghao@xiaomi.com>
