@@ -6,8 +6,7 @@ Yudatun redefining Brillo.
 Main Page:
 ----------------------------------------
 
-[![image]](http://yudatun.strikingly.com)
-[image]: https://avatars3.githubusercontent.com/u/5319183?s=400 "Yudatun"
+http://yudatun.strikingly.com
 
 Preparation:
 ----------------------------------------
