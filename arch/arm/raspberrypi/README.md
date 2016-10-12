@@ -6,7 +6,23 @@ Get sources:
 
 ```
 $ mkdir ~/Yudatun
+```
+
+### master
+
+```
 $ repo init -u ssh://git@github.com/yudatun/brillo_manifest.git -m yudatun-v1-rpi-dev.xml
+```
+
+### brillo-m10-release
+
+```
+repo init -u ssh://git@github.com/yudatun/brillo_manifest.git -b brillo-m10-release -m yudatun-v1-rpi-dev.xml
+```
+
+Sync Srouces:
+
+```
 $ repo sync -j[num]
 ```
 
