@@ -40,11 +40,7 @@ $ chmod a+x ~/bin/repo
 Platforms:
 ----------------------------------------
 
-### qemu
-
-https://github.com/yudatun/Documentation/tree/master/arch/qemu/README.md
-
-### raspberry-pi
+### Raspberry Pi
 
 https://github.com/yudatun/Documentation/tree/master/arch/arm/raspberrypi/README.md
 

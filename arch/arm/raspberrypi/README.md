@@ -20,13 +20,13 @@ $ repo init -u ssh://git@github.com/yudatun/brillo_manifest.git -m yudatun-v1-rp
 repo init -u ssh://git@github.com/yudatun/brillo_manifest.git -b brillo-m10-release -m yudatun-v1-rpi-dev.xml
 ```
 
-Sync Srouces:
+Sync Sources:
 
 ```
 $ repo sync -j[num]
 ```
 
-Build images:
+Build Images:
 ----------------------------------------
 
 ```
@@ -35,7 +35,7 @@ $ lunch
 $ make -j[num]
 ```
 
-Flash images:
+Flash Images:
 ----------------------------------------
 
 ```
@@ -52,7 +52,7 @@ Connection:
 
 ### eth0
 
-#### HOST
+##### HOST
 
 ```
 $ avahi-browse -ar
@@ -66,7 +66,7 @@ $ avahi-browse -ar
 $ adb connect 192.168.1.6
 ```
 
-#### TARGET
+##### TARGET
 
 ```
 # ifconfig
@@ -82,6 +82,8 @@ eth0      Link encap:Ethernet  HWaddr b8:27:eb:8d:f0:6d
 
 ### wlan0
 
+##### TARGET
+
 ```
 # shill_setup_wifi --ssid=ssid --passphrase=password
 [0101/000203:INFO:dbus_client.cc(82)] Sleeping now. Will check wifi status in 100 ms.
@@ -95,5 +97,10 @@ wlan0     Link encap:Ethernet  HWaddr b8:27:eb:d8:a5:38
           TX packets:17 errors:0 dropped:0 overruns:0 carrier:0
           collisions:0 txqueuelen:1000
           RX bytes:84810 TX bytes:2831
-# adb connect 192.168.1.13
+```
+
+##### HOST
+
+```
+$ adb connect 192.168.1.13
 ```
