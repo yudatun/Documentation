@@ -19,8 +19,10 @@ pointer to the `Service` object becomes invalidated. As soon as weaved is
 restarted and the connection is restored, the `callback` is invoked again and
 the client can re-register command handlers, update the state again.
 
-example
+Example
 ----------------------------------------
+
+### simple
 
 A simple client daemon that works with weaved could be as follows:
 
@@ -80,3 +82,7 @@ void Daemon::UpdateDeviceState() {
   weave_service->SetStateProperties("myComponent", state_change, nullptr);
 }
 ```
+
+### complex
+
+https://github.com/yudatun/product_yudatun_yudatun-smartcar/tree/master/src/smartcar
