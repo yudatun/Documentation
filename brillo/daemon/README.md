@@ -16,10 +16,12 @@ brillo::Daemon
 
 path: external/libbrillo/brillo/deamons/daemon.h
 
+```
 namespace brillo {
 class BRILLO_EXPORT Daemon : public AsynchronousSignalHandlerInterface {
 };
 }
+```
 
 ### Construct
 
