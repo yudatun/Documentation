@@ -6,13 +6,14 @@ weaved
 This directory contains the a Brillo service for registering a device and
 sending/receiving remote commands.
 
-Diagraming
+buffet::Daemon
 ----------------------------------------
+
+### Diagraming
 
 http://www.processon.com/diagraming/58101768e4b0bf457c943022
 
-Flowchart
-----------------------------------------
+### FlowChart
 
 ```
    DBusDaemon:
@@ -33,10 +34,21 @@ buffet::Daemon::RegisterDBusObjectsAsync()
  |
  +-> manager_ = new Manager{options_, bus_}
  |
- manager_->Start()
-  |
- buffet::Manager::RestartWeave()
-  |
+ +-> manager_->Start()
+```
+
+buffet::Manager
+----------------------------------------
+
+### Diagraming
+
+### buffet::Manager::Start() FlowChart
+
+```
+buffet::Manager::Start()
+ |
+buffet::Manager::RestartWeave()
+ |
  +-> task_runner_ = new TaskRunner
  |
  +-> config_ = new BuffetConfig
@@ -51,8 +63,15 @@ buffet::Daemon::RegisterDBusObjectsAsync()
  |
  +-> bluetooth_client_ = BluetoothClient::CreateInstance
  |
- buffet::Manager::CreateDevice()
-  |
+ +-> buffet::Manager::CreateDevice()
+```
+
+weave::DeviceManager::DeviceManager
+----------------------------------------
+
+```
+buffet::Manager::CreateDevice()
+ |
 device_ = weave::Device::Create()
  |
 new weave::DeviceManager::DeviceManager
@@ -73,12 +92,23 @@ new weave::DeviceManager::DeviceManager
  |
  +-> device_info_->Start()
  |
- weave::StartPrivet
-  |
- +-> privet_ = new privet::Manager{task_runner_}
+ +-> weave::StartPrivet()
+      |
+      +-> privet_ = new privet::Manager{task_runner_}
+      |
+      +-> privet->Start()
+```
+
+privet::Manager
+----------------------------------------
+
+### Diagraming
+
+### StartPrivet FlowChart
+
+```
+privet::Manager::Start()
  |
- privet->Start()
-  |
  +-> device_ = DeviceDelegate::CreateDefault
  |
  +-> cloud_ = CludDelegate::CreateDefault
@@ -89,5 +119,16 @@ new weave::DeviceManager::DeviceManager
  |
  +-> privet_handler_->AddHttpRequestHandler
  |
- privet_handler_->AddHttpsRequestHandler
+ +-> privet_handler_->AddHttpsRequestHandler
+```
+
+PrivetHandler
+----------------------------------------
+
+### Diagraming
+
+
+### Flowchart
+
+```
 ```
