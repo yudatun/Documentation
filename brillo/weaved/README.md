@@ -35,8 +35,8 @@ buffet::Daemon::RegisterDBusObjectsAsync()
  |
  manager_->Start()
   |
-buffet::Manager::RestartWeave()
- #
+ buffet::Manager::RestartWeave()
+  |
  +-> task_runner_ = new TaskRunner
  |
  +-> config_ = new BuffetConfig
