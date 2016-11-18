@@ -9,7 +9,9 @@ sending/receiving remote commands.
 buffet::Daemon
 ----------------------------------------
 
-![buffet::Daemon](https://github.com/yudatun/Documentation/tree/master/brillo/weaved/res/buffet::Daemon.png)
+![buffet::Daemon][buffet::Daemon]
+
+[buffet::Daemon]: https://github.com/yudatun/Documentation/tree/master/brillo/weaved/res/buffet::Daemon.png
 
 #### FlowChart
 
