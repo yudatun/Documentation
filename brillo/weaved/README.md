@@ -9,9 +9,7 @@ sending/receiving remote commands.
 buffet::Daemon
 ----------------------------------------
 
-![buffet::Daemon][buffet::Daemon]
-
-[buffet::Daemon]: https://github.com/yudatun/Documentation/tree/master/brillo/weaved/res/buffet::Daemon.png
+![buffet::Daemon](https://github.com/yudatun/Documentation/tree/master/brillo/weaved/res/buffet::Daemon.png)
 
 #### FlowChart
 
@@ -66,8 +64,12 @@ buffet::Manager::RestartWeave()
  +-> buffet::Manager::CreateDevice()
 ```
 
-weave::DeviceManager::DeviceManager
+weave::DeviceManager
 ----------------------------------------
+
+![weave::DeviceManager](https://github.com/yudatun/Documentation/tree/master/brillo/weaved/res/weave::DeviceManager.png)
+
+#### FlowChart
 
 ```
 buffet::Manager::CreateDevice()
@@ -92,19 +94,19 @@ new weave::DeviceManager::DeviceManager
  |
  +-> device_info_->Start()
  |
- +-> weave::StartPrivet()
+ +-> weave::DeviceManager::StartPrivet()
       |
       +-> privet_ = new privet::Manager{task_runner_}
       |
       +-> privet->Start()
 ```
 
-privet::Manager
+weave::privet::Manager
 ----------------------------------------
 
-### Diagraming
+![weave::privet::Manager](https://github.com/yudatun/Documentation/tree/master/brillo/weaved/res/weave::privet::Manager.png)
 
-### StartPrivet FlowChart
+#### privet::Manager::Start
 
 ```
 privet::Manager::Start()
@@ -117,18 +119,132 @@ privet::Manager::Start()
  |
  +-> privet_handler_ = new PrivetHandler
  |
- +-> privet_handler_->AddHttpRequestHandler
- |
- +-> privet_handler_->AddHttpsRequestHandler
+ +-> http_server->AddHttpRequestHandler(path, base::Bind(&Manager::PrivetRequestHandler,
+ |                        weak_ptr_factory_.GetWeakPtr()))
+ +-> http_server->AddHttpsRequestHandler(path, base::Bind(&Manager::PrivetRequestHandler,
+                         weak_ptr_factory_.GetWeakPtr()))
 ```
 
-PrivetHandler
+* http_server is buffet::WebServClient
+
+weave::privet::PrivetHandler
 ----------------------------------------
 
-### Diagraming
+```
+PrivetHandler::PrivetHandler()
+ |
+ +-> AddHandler("/privet/info", &PrivetHandler::HandleInfo, AuthScope::kNone);
+ |
+ +-> AddHandler("/privet/v3/pairing/start", &PrivetHandler::HandlePairingStart, AuthScope::kNone);
+ |
+ +-> AddHandler("/privet/v3/pairing/confirm", &PrivetHandler::HandlePairingConfirm, AuthScope::kNone);
+ |
+ +-> AddHandler("/privet/v3/pairing/cancel", &PrivetHandler::HandlePairingCancel, AuthScope::kNone);
+ |
+ +-> AddSecureHandler("/privet/v3/auth", &PrivetHandler::HandleAuth, AuthScope::kNone);
+ |
+ +-> AddSecureHandler("/privet/v3/accessControl/claim", &PrivetHandler::HandleAccessControlClaim, AuthScope::kOwner);
+ |
+ +-> AddSecureHandler("/privet/v3/accessControl/confirm", &PrivetHandler::HandleAccessControlConfirm, AuthScope::kOwner);
+ |
+ +-> AddSecureHandler("/privet/v3/setup/start", &PrivetHandler::HandleSetupStart, AuthScope::kManager);
+ |
+ +-> AddSecureHandler("/privet/v3/setup/status", &PrivetHandler::HandleSetupStatus,
+ |                  AuthScope::kManager);
+ +-> AddSecureHandler("/privet/v3/state", &PrivetHandler::HandleState,
+ |                  AuthScope::kViewer);
+ +-> AddSecureHandler("/privet/v3/commandDefs", &PrivetHandler::HandleCommandDefs,
+ |                  AuthScope::kViewer);
+ +-> AddSecureHandler("/privet/v3/commands/execute",
+ |                  &PrivetHandler::HandleCommandsExecute, AuthScope::kViewer);
+ +-> AddSecureHandler("/privet/v3/commands/status",
+ |                  &PrivetHandler::HandleCommandsStatus, AuthScope::kViewer);
+ +-> AddSecureHandler("/privet/v3/commands/cancel",
+ |                  &PrivetHandler::HandleCommandsCancel, AuthScope::kViewer);
+ +-> AddSecureHandler("/privet/v3/commands/list",
+ |                  &PrivetHandler::HandleCommandsList, AuthScope::kViewer);
+ +-> AddSecureHandler("/privet/v3/checkForUpdates",
+ |                  &PrivetHandler::HandleCheckForUpdates, AuthScope::kViewer);
+ +-> AddSecureHandler("/privet/v3/traits", &PrivetHandler::HandleTraits,
+ |                  AuthScope::kViewer);
+ +-> AddSecureHandler("/privet/v3/components", &PrivetHandler::HandleComponents,
+ |                  AuthScope::kViewer);
+```
 
+buffet::WebServClient
+----------------------------------------
 
-### Flowchart
+![buffet::WebServClient](https://github.com/yudatun/Documentation/tree/master/brillo/weaved/res/buffet::WebServClient.png)
+
+#### buffet::WebServClient::WebServClient
 
 ```
+buffet::WebServClient::WebServClient
+ |
+ +-> web_server_ = libwebserv::Server::ConnectToServerViaDBus("com.android.Weave")
+ |
+ +-> web_server_->OnProtocolHandlerConnected(base::Bind(&WebServClient::OnProtocolHandlerConnected,
+ |                weak_ptr_factory_.GetWeakPtr()))
+ +-> web_server_->OnProtocolHandlerDisconnected(base::Bind(&WebServClient::OnProtocolHandlerDisconnected,
+ |                weak_ptr_factory_.GetWeakPtr()));
+```
+
+#### buffet::WebServClient::AddHttpRequestHandler
+
+```
+buffet::WebServClient::AddHttpRequestHandler
+ |
+ +-> web_server_->GetDefaultHttpHandler()->AddHandlerCallback(path, "",
+ |    base::Bind(&WebServClient::OnRequest, weak_ptr_factory_.GetWeakPtr(), callback))
+```
+
+libwebserv::Server
+----------------------------------------
+
+```
+libwebserv::Server::ConnectToServerViaDBus("com.android.Weave")
+ |
+ +-> server = new DBusServer
+ |
+ +-> server->Connect("com.android.Weave")
+```
+
+libwebserv::DBusServer
+----------------------------------------
+
+#### libwebserv::DBusServer::DBusServer
+
+```
+libwebserv::DBusServer::DBusServer
+ |
+ +-> request_handler_ = new RequestHandler
+ |
+ +-> dbus_adaptor_ = new org::chromium::WebServer::RequestHandlerAdaptor(request_handler_)
+```
+
+#### libwebserv::DBusServer::Connect
+
+```
+libwebserv::DBusServer::Connect
+ |
+ +-> service_name = "com.android.Weave"
+ |
+ +-> dbus_object_ = new brillo::dbus_utils::DBusObject(
+ |       bus, dbus_adaptor_.GetObjectPath())
+ |            |
+ |            +-> dbus::ObjectPath("/org/chromium/WebServer/RequestHandler")
+ +-> dbus_adaptor_->RegisterWithDBusObject(dbus_object_)
+ |
+ +-> dubs_object_->RegisterAsync()
+ |
+ +-> object_manager_ = new org::chromium::WebServer::ObjectManagerProxy{bus}
+ |
+ +-> object_manager_->SetServerAddedCallback(
+ |     base::Bind(&DBusServer::Online, base::Unretained(this)));
+ +-> object_manager_->SetServerRemovedCallback(
+ |     base::Bind(&DBusServer::Offline, base::Unretained(this)));
+ +-> object_manager_->SetProtocolHandlerAddedCallback(
+ |     base::Bind(&DBusServer::ProtocolHandlerAdded, base::Unretained(this)));
+ +-> object_manager_->SetProtocolHandlerRemovedCallback(
+ |     base::Bind(&DBusServer::ProtocolHandlerRemoved, base::Unretained(this)));
 ```
