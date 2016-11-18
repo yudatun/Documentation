@@ -9,11 +9,9 @@ sending/receiving remote commands.
 buffet::Daemon
 ----------------------------------------
 
-### Diagraming
+![buffet::Daemon](https://github.com/yudatun/Documentation/tree/master/brillo/weaved/res/buffet::Daemon.png)
 
-http://www.processon.com/diagraming/58101768e4b0bf457c943022
-
-### FlowChart
+#### FlowChart
 
 ```
    DBusDaemon:
@@ -40,9 +38,9 @@ buffet::Daemon::RegisterDBusObjectsAsync()
 buffet::Manager
 ----------------------------------------
 
-### Diagraming
+![buffet::Manager](https://github.com/yudatun/Documentation/tree/master/brillo/weaved/res/buffet::Manager.png)
 
-### buffet::Manager::Start() FlowChart
+#### FlowChart
 
 ```
 buffet::Manager::Start()
