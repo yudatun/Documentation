@@ -127,6 +127,12 @@ privet::Manager::Start()
 
 * http_server is buffet::WebServClient
 
+#### PrivetRequestHandler
+
+```
+privet::Manager::PrivetRequestHandler()
+```
+
 weave::privet::PrivetHandler
 ----------------------------------------
 
@@ -189,13 +195,23 @@ buffet::WebServClient::WebServClient
  |                weak_ptr_factory_.GetWeakPtr()));
 ```
 
-#### buffet::WebServClient::AddHttpRequestHandler
+#### AddHttpRequestHandler
 
 ```
-buffet::WebServClient::AddHttpRequestHandler
- |
+buffet::WebServClient::AddHttpRequestHandler(
+ | const std::string& path, const RequestHandlerCallback& callback))
  +-> web_server_->GetDefaultHttpHandler()->AddHandlerCallback(path, "",
  |    base::Bind(&WebServClient::OnRequest, weak_ptr_factory_.GetWeakPtr(), callback))
+```
+
+#### OnRequest
+
+```
+buffet::WebServClient::OnRequest(const RequestHandlerCallback& callback,
+ |  std::unique_ptr<libwebserv::Request> request, std::unique_ptr<libwebserv::Response> response)
+ +-> std::unique_ptr<Request> weave_request{new RequestImpl{std::move(request), std::move(response)}}
+ |
+ +-> callback.Run(std::move(weave_request))
 ```
 
 libwebserv::Server
@@ -222,7 +238,7 @@ libwebserv::DBusServer::DBusServer
  +-> dbus_adaptor_ = new org::chromium::WebServer::RequestHandlerAdaptor(request_handler_)
 ```
 
-#### libwebserv::DBusServer::Connect
+#### Connect
 
 ```
 libwebserv::DBusServer::Connect
@@ -249,7 +265,23 @@ libwebserv::DBusServer::Connect
  |     base::Bind(&DBusServer::ProtocolHandlerRemoved, base::Unretained(this)));
 ```
 
-#### libwebserv::DBusServer::GetDefaultHttpHandler
+#### ProtocolHandlerAdded
+
+```
+libwebserv::DBusServer::ProtocolHandlerAdded(
+ |  org::chromium::WebServer::ProtocolHandlerProxyInterface* handler))
+ +-> protocol_handler_id_map_.emplace(handler->GetObjectPath(), handler->id());
+ |
+ +-> DBusProtocolHandler* registered_handler = GetProtocolHandlerImpl(handler->name());
+ |
+ +-> protocol_handlers_ids_.emplace(handler->id(), registered_handler);
+ |
+ +-> registered_handler->Connect(handler);
+ |
+ +-> on_protocol_handler_connected_.Run(registered_handler);
+```
+
+#### GetDefaultHttpHandler
 
 ```
 libwebserv::DBusServer::GetDefaultHttpHandler
@@ -259,16 +291,38 @@ libwebserv::DBusServer::GetProtocolHandler(ProtocolHandler::kHttp)
 libwebserv::DBusServer::GetProtocolHandlerImpl()
  |
  +-> protocol_handlers_names_.emplace(name,
-      std::unique_ptr<DBusProtocolHandler>{new DBusProtocolHandler{name, this}}).first;
+ |     std::unique_ptr<DBusProtocolHandler>{new DBusProtocolHandler{name, this}}).first;
 ```
 
 libwebserv::DBusProtocolHandler
 ----------------------------------------
 
+#### Connect
+
 ```
-libwebserv::DBusProtocolHandler::AddHandlerCallback
+libwebserv::DBusProtocolHandler::Connect
  |
+ +-> proxies_.emplace(proxy->GetObjectPath(), proxy)
+ |
+ +-> proxy->AddRequestHandlerAsync
+```
+
+#### AddHandlerCallback
+
+```
+libwebserv::DBusProtocolHandler::AddHandlerCallback(const std::string& url, const std::string& method,
+ |   const base::Callback<RequestHandlerInterface::HandlerSignature>& handler_callback)
  +-> handler{new RequestHandlerCallback{handler_callback}}
  |
  +-> libwebserv::DBusProtocolHandler::AddHandler(url, method, std::move(handler))
+```
+
+#### AddHandler
+
+```
+libwebserv::DBusProtocolHandler::AddHandler(const std::string& url,
+ |   const std::string& method, std::unique_ptr<RequestHandlerInterface> handler)
+ +-> request_handlers_.emplace(++last_handler_id_, HandlerMapEntry{url, method,
+ |     std::map<ProtocolHandlerProxyInterface*, std::string>{}, std::move(handler)});
+ +-> proxy->AddRequestHandlerAsync
 ```
