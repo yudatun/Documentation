@@ -248,3 +248,27 @@ libwebserv::DBusServer::Connect
  +-> object_manager_->SetProtocolHandlerRemovedCallback(
  |     base::Bind(&DBusServer::ProtocolHandlerRemoved, base::Unretained(this)));
 ```
+
+#### libwebserv::DBusServer::GetDefaultHttpHandler
+
+```
+libwebserv::DBusServer::GetDefaultHttpHandler
+ |
+libwebserv::DBusServer::GetProtocolHandler(ProtocolHandler::kHttp)
+ |
+libwebserv::DBusServer::GetProtocolHandlerImpl()
+ |
+ +-> protocol_handlers_names_.emplace(name,
+      std::unique_ptr<DBusProtocolHandler>{new DBusProtocolHandler{name, this}}).first;
+```
+
+libwebserv::DBusProtocolHandler
+----------------------------------------
+
+```
+libwebserv::DBusProtocolHandler::AddHandlerCallback
+ |
+ +-> handler{new RequestHandlerCallback{handler_callback}}
+ |
+ +-> libwebserv::DBusProtocolHandler::AddHandler(url, method, std::move(handler))
+```
