@@ -62,6 +62,10 @@ buffet::Manager::RestartWeave()
  +-> bluetooth_client_ = BluetoothClient::CreateInstance
  |
  +-> buffet::Manager::CreateDevice()
+     |
+     +-> device_ = weave::Device::Create()
+         |
+         +-> new weave::DeviceManager::DeviceManager
 ```
 
 weave::DeviceManager
@@ -72,11 +76,7 @@ weave::DeviceManager
 #### FlowChart
 
 ```
-buffet::Manager::CreateDevice()
- |
-device_ = weave::Device::Create()
- |
-new weave::DeviceManager::DeviceManager
+weave::DeviceManager::DeviceManager
  |
  +-> config_ = new Config
  |
@@ -182,7 +182,7 @@ buffet::WebServClient
 
 ![buffet::WebServClient](https://github.com/yudatun/Documentation/tree/master/brillo/weaved/res/buffet::WebServClient.png)
 
-#### buffet::WebServClient::WebServClient
+### WebServClient
 
 ```
 buffet::WebServClient::WebServClient
@@ -195,7 +195,7 @@ buffet::WebServClient::WebServClient
  |                weak_ptr_factory_.GetWeakPtr()));
 ```
 
-#### AddHttpRequestHandler
+### AddHttpRequestHandler
 
 ```
 buffet::WebServClient::AddHttpRequestHandler(
@@ -204,7 +204,7 @@ buffet::WebServClient::AddHttpRequestHandler(
  |    base::Bind(&WebServClient::OnRequest, weak_ptr_factory_.GetWeakPtr(), callback))
 ```
 
-#### OnRequest
+### OnRequest
 
 ```
 buffet::WebServClient::OnRequest(const RequestHandlerCallback& callback,
@@ -217,6 +217,8 @@ buffet::WebServClient::OnRequest(const RequestHandlerCallback& callback,
 libwebserv::Server
 ----------------------------------------
 
+### ConnectToServerViaDBus
+
 ```
 libwebserv::Server::ConnectToServerViaDBus("com.android.Weave")
  |
@@ -228,7 +230,7 @@ libwebserv::Server::ConnectToServerViaDBus("com.android.Weave")
 libwebserv::DBusServer
 ----------------------------------------
 
-#### libwebserv::DBusServer::DBusServer
+### DBusServer
 
 ```
 libwebserv::DBusServer::DBusServer
@@ -238,7 +240,7 @@ libwebserv::DBusServer::DBusServer
  +-> dbus_adaptor_ = new org::chromium::WebServer::RequestHandlerAdaptor(request_handler_)
 ```
 
-#### Connect
+### Connect
 
 ```
 libwebserv::DBusServer::Connect
@@ -265,7 +267,28 @@ libwebserv::DBusServer::Connect
  |     base::Bind(&DBusServer::ProtocolHandlerRemoved, base::Unretained(this)));
 ```
 
-#### ProtocolHandlerAdded
+### GetDefaultHttpHandler
+
+```
+libwebserv::DBusServer::GetDefaultHttpHandler
+ |
+libwebserv::DBusServer::GetProtocolHandler(ProtocolHandler::kHttp)
+ |
+libwebserv::DBusServer::GetProtocolHandlerImpl()
+ |
+ +-> protocol_handlers_names_.emplace(name,
+ |     std::unique_ptr<DBusProtocolHandler>{new DBusProtocolHandler{name, this}}).first;
+```
+
+### OnProtocolHandlerConnected
+
+```
+DBusServer::OnProtocolHandlerConnected
+ |
+ +-> on_protocol_handler_connected_ = callback
+```
+
+### ProtocolHandlerAdded
 
 ```
 libwebserv::DBusServer::ProtocolHandlerAdded(
@@ -281,23 +304,10 @@ libwebserv::DBusServer::ProtocolHandlerAdded(
  +-> on_protocol_handler_connected_.Run(registered_handler);
 ```
 
-#### GetDefaultHttpHandler
-
-```
-libwebserv::DBusServer::GetDefaultHttpHandler
- |
-libwebserv::DBusServer::GetProtocolHandler(ProtocolHandler::kHttp)
- |
-libwebserv::DBusServer::GetProtocolHandlerImpl()
- |
- +-> protocol_handlers_names_.emplace(name,
- |     std::unique_ptr<DBusProtocolHandler>{new DBusProtocolHandler{name, this}}).first;
-```
-
 libwebserv::DBusProtocolHandler
 ----------------------------------------
 
-#### Connect
+### Connect
 
 ```
 libwebserv::DBusProtocolHandler::Connect
@@ -307,7 +317,7 @@ libwebserv::DBusProtocolHandler::Connect
  +-> proxy->AddRequestHandlerAsync
 ```
 
-#### AddHandlerCallback
+### AddHandlerCallback
 
 ```
 libwebserv::DBusProtocolHandler::AddHandlerCallback(const std::string& url, const std::string& method,
@@ -317,7 +327,7 @@ libwebserv::DBusProtocolHandler::AddHandlerCallback(const std::string& url, cons
  +-> libwebserv::DBusProtocolHandler::AddHandler(url, method, std::move(handler))
 ```
 
-#### AddHandler
+### AddHandler
 
 ```
 libwebserv::DBusProtocolHandler::AddHandler(const std::string& url,
