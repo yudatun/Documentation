@@ -1,7 +1,7 @@
 The Yudatun Open Source Project
 ========================================
 
-Get sources:
+Get Sources:
 ----------------------------------------
 
 ```
@@ -31,7 +31,7 @@ Build Images:
 
 ```
 $ . build/envsetup.sh
-$ lunch
+$ lunch raspberrypi3-eng
 $ make -j[num]
 ```
 
