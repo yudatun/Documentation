@@ -104,3 +104,101 @@ wlan0     Link encap:Ethernet  HWaddr b8:27:eb:d8:a5:38
 ```
 $ adb connect 192.168.1.13
 ```
+
+curl
+----------------------------------------
+
+### privet/info
+
+```
+$ curl -H "Authorization: Privt anonymous" -k https://10.232.33.37/privet/info
+{
+   "authentication": {
+      "anonymousMaxScope": "user",
+      "crypto": [ "p224_spake2" ],
+      "mode": [ "anonymous", "pairing" ],
+      "pairing": [ "embeddedCode" ]
+   },
+   "basicModelManifest": {
+      "modelName": "Brillo Starter Board",
+      "oemName": "Yudatun, Inc.",
+      "uiDeviceKind": "vendor"
+   },
+   "description": "Controls Car",
+   "endpoints": {
+      "httpPort": 80,
+      "httpUpdatesPort": 80,
+      "httpsPort": 443,
+      "httpsUpdatesPort": 443
+   },
+   "gcd": {
+      "id": "",
+      "oauth_url": "https://accounts.google.com/o/oauth2/",
+      "service_url": "https://www.googleapis.com/weave/v1/",
+      "status": "unconfigured",
+      "xmpp_endpoint": "talk.google.com:5223"
+   },
+   "id": "37D535F6-8ED1-4E31-B46F-8EE5EAE007BB",
+   "modelManifestId": "AAw7x",
+   "name": "Smart Car",
+   "services": [ "vendor" ],
+   "sessionId": "533187446:1",
+   "time": 1479872246356.14502,
+   "version": "3.0",
+   "wifi": {
+      "capabilities": [ "2.4GHz" ],
+      "ssid": "",
+      "status": "online"
+   }
+}
+```
+
+### privet/v3/auth
+
+```
+$ curl -H "Authorization: Privet anonymous" -H 'Content-Type: application/json' \
+  -X POST \
+  --data '{ "mode": "anonymous", "requestedScope": "owner" }' \
+  -k https://10.232.33.37/privet/v3/auth
+{
+   "error": {
+      "code": "accessDenied",
+      "debugInfo": [ {
+         "code": "accessDenied",
+         "debugInfo": "HandleAuth@external/libweave/src/privet/privet_handler.cc:717",
+         "message": "Scope 'user' is not allowed"
+      } ],
+      "message": "Scope 'user' is not allowed"
+   }
+}
+
+$ curl -H "Authorization: Privet anonymous" -H 'Content-Type: application/json' -X POST --data '{ "mode": "anonymous", "requestedScope": "user" }'     -k https://10.232.33.37/privet/v3/auth
+{
+   "accessToken": "WCuFRggaH8fv4UIBDkQJQjIAQgpARgUaH8f98VADjblgXFyuQq8u7Aktm1yj",
+   "expiresIn": 3600,
+   "scope": "user",
+   "tokenType": "Privet"
+}
+```
+
+### privet/v3/commands/list
+
+```
+$ curl -H "Authorization: Privet WCuFRggaH8fv4UIBDkQJQjIAQgpARgUaH8f98VADjblgXFyuQq8u7Aktm1yj" -k https://10.232.33.37/privet/v3/commands/list
+{
+   "commands": [  ]
+}
+```
+
+### privet/v3/pairing/start
+
+```
+$ curl -H "Authorization: Privet anonymous" -H 'Content-Type: application/json' \
+>     -X POST \
+>     --data '{ "pairing": "embeddedCode", "crypto": "p224_spake2" }' \
+>     -k https://10.232.33.37/privet/v3/pairing/start
+{
+   "deviceCommitment": "APfyX0HQQ69iGS7w//7TfkrIzLr0hEk9VxceJXXM2pEeR/z6zN6LrpBSfdC39Qq4HA87AoxbPW4=",
+   "sessionId": "B5C3AD6C-406F-4491-9647-495E27840CE3"
+}
+```
