@@ -202,3 +202,24 @@ $ curl -H "Authorization: Privet anonymous" -H 'Content-Type: application/json' 
    "sessionId": "B5C3AD6C-406F-4491-9647-495E27840CE3"
 }
 ```
+
+### privet/v3/commands/execute
+
+```
+$ curl -H "Authorization: Privet WCuFRggaH8fv+0IBDkQJQjEAQgpARgUaH8f+C1D2s9N5dS2SGrDHA8AZ2Qzm" -H 'Content-Type: application/json' -X POST --data '{ "deviceId": "37D535F6-8ED1-4E31-B46F-8EE5EAE007BB", "name": "_smartcar.action", "component": "smartcar", "parameters": {"duration": "20", "type": "forward"} }'     -k https://192.168.1.10/privet/v3/commands/execute
+{
+   "id": "1",
+   "name": "_smartcar.action",
+   "parameters": {
+      "duration": "20",
+      "type": "forward"
+   },
+   "progress": {
+
+   },
+   "results": {
+
+   },
+   "state": "queued"
+}
+```
