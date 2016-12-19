@@ -39,6 +39,8 @@ Flash Images:
 ----------------------------------------
 
 ```
+# Erase the front of 16MB
+$ sudo dd if=/dev/zero of=/dev/mmcblk0 bs=4096 count=4096
 $ sudo dd if=MBR.bin of=/dev/mmcblk0 bs=512
 $ sudo dd if=rpi-boot.img of=/dev/mmcblk0p1 bs=4096
 $ simg2img system.img system.img.ext4
