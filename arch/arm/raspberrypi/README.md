@@ -54,21 +54,23 @@ Connection:
 
 ### eth0
 
-##### HOST
+#### PC
 
 ```
 $ avahi-browse -ar
 + wlx00e04c0915de IPv4 7d3ca73b-1e7a-47dc-b890-23bd6c88e127          _privet._tcp         local
 = wlx00e04c0915de IPv4 7d3ca73b-1e7a-47dc-b890-23bd6c88e127          _privet._tcp         local
-   hostname = [linux.local]
+   hostname = [Yudatun.local]
    address = [192.168.1.6]
    port = [80]
    txt = ["https=443" "flags=CA" "mmid=AAAAA" "id=94539ec6-1c7c-4e09-9b70-74fe210c58c5" "services=vendor" "ty=Developer device" "txtvers=3"]
 - wlx00e04c0915de IPv4 7d3ca73b-1e7a-47dc-b890-23bd6c88e127          _privet._tcp         local
 $ adb connect 192.168.1.6
+or
+$ adb connect Yudatun.local
 ```
 
-##### TARGET
+#### raspberrypi
 
 ```
 # ifconfig
@@ -84,7 +86,7 @@ eth0      Link encap:Ethernet  HWaddr b8:27:eb:8d:f0:6d
 
 ### wlan0
 
-##### TARGET
+#### raspberrypi
 
 ```
 # shill_setup_wifi --ssid=ssid --passphrase=password
@@ -101,7 +103,7 @@ wlan0     Link encap:Ethernet  HWaddr b8:27:eb:d8:a5:38
           RX bytes:84810 TX bytes:2831
 ```
 
-##### HOST
+#### pc
 
 ```
 $ adb connect 192.168.1.13
