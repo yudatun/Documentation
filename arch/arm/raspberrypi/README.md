@@ -4,6 +4,26 @@ The Yudatun Open Source Project
 Get Sources:
 ----------------------------------------
 
+**MACOS**:
+
+```
+$ hdiutil create -type SPARSE -fs 'Case-sensitive Journaled HFS+' -size 40g wave.dmg
+created: /Volumes/lixinmu/workspace/wave.dmg.sparseimage
+$ hdiutil attach wave.dmg.sparseimage -mountpoint /Volumes/wave
+$ cd /Volumes/wave
+```
+
+Detach:
+
+```
+$ hdiutil resize -size <new-size-you-want>g wave.dmg.sparseimage
+$ hdiutil detach /Volumes/wave
+```
+
+OR
+
+**UNIX/LINUX**:
+
 ```
 $ mkdir ~/Yudatun
 ```
